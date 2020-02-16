@@ -44,14 +44,7 @@ class NewOrder extends React.Component<Props, State>{
             address: ''
         },
         order: [
-            {
-                size: {
-                    "name": "Large",
-                    "price": 40.00,
-                    "id": 1
-                },
-                toppings: {}
-            }
+
         ],
     };
 
@@ -64,28 +57,45 @@ class NewOrder extends React.Component<Props, State>{
     onSizeChange = (e: any): void => {
         const selectedSize = this.props.sizes[e.target.value];
         // TODO: get i from event, should be index of pizza in order
-        const i = 0;
-        const order = this.state.order[i];
-        order.size = selectedSize;
-        this.setState({order: [order]});
+        const i = e.target.dataset.pizza;
+        const order = this.state.order;
+        order[i].size = selectedSize;
+        this.setState({order});
     }
 
     onToppingChange = (e: any): void => {
         const topping = this.props.toppings[e.target.value];
         // TODO: get i from event, should be index of pizza in order
-        const pizza = this.state.order[0];
+        const i = e.target.dataset.pizza;
+        const order = this.state.order;
+        const pizza = order[i];
         const toppingExists = pizza.toppings[topping.id];
         if(toppingExists) {
             delete pizza.toppings[topping.id]
         } else {
             pizza.toppings[topping.id] = topping
         }
-        this.setState({order: [pizza]})
+        this.setState({order})
     };
 
     onSubmit = (e: any): void => {
         e.preventDefault();
         console.log(this.state);
+    };
+
+    addItem = ():void => {
+        const defaultSize = {
+            "name": "Large",
+            "price": 40.00,
+            "id": 1
+        };
+        const newItem = {
+            size: defaultSize,
+            toppings: {}
+        };
+        const order = this.state.order;
+        order.push(newItem);
+        this.setState({order})
     };
 
     getPrice = (pizza: Pizza): number => {
@@ -155,48 +165,54 @@ class NewOrder extends React.Component<Props, State>{
                 </div>
                 <div>
                     <h3>Choose your pizza</h3>
+                    <button onClick={this.addItem}>Add pizza</button>
                     {/* Pizza form*/}
-                    <div>
-                        <div>
-                            <h4>Pizza 1</h4>
-                            <button>Remove Pizza</button>
+                    { this.state.order.map((pizza, pizzaIndex) => (
+                        <div key={pizzaIndex}>
+                            <div>
+                                <h4>Pizza {pizzaIndex + 1}</h4>
+                                <button>Remove Pizza</button>
+                            </div>
+                            <div>
+                                <h4>Choose size</h4>
+                                {
+                                    this.props.sizes.map((size, i) => (
+                                        <label key={size.name + i}>
+                                            <input
+                                                type="radio"
+                                                name={'size' + pizzaIndex}
+                                                checked={pizza.size.id === size.id}
+                                                data-pizza={pizzaIndex}
+                                                onChange={this.onSizeChange}
+                                                value={ i }
+                                            />
+                                            { size.name }
+                                        </label>
+                                    ))
+                                }
+                            </div>
+                            <div>
+                                <h4>Pick your toppings</h4>
+                                {
+                                    this.props.toppings.map((topping, i) => (
+                                        <label key={topping.name + i}>
+                                            <input
+                                                type="checkbox"
+                                                name={'topping' + pizzaIndex}
+                                                data-pizza={pizzaIndex}
+                                                onChange={this.onToppingChange}
+                                                checked={ pizza.toppings[topping.id] !== undefined }
+                                                value={ i }
+                                            />
+                                            {topping.name}
+                                        </label>
+                                    ))
+                                }
+                            </div>
                         </div>
-                        <div>
-                            <h4>Choose size</h4>
-                            {
-                                this.props.sizes.map((size, i) => (
-                                    <label key={size.name + i}>
-                                        <input
-                                            type="radio"
-                                            name="size"
-                                            checked={this.state.order[0].size.id === size.id}
-                                            onChange={this.onSizeChange}
-                                            value={ i }
-                                        />
-                                        { size.name }
-                                    </label>
-                                ))
-                            }
-                        </div>
-                        <div>
-                        <h4>Pick your toppings</h4>
-                        {
-                            this.props.toppings.map((topping, i) => (
-                                <label key={topping.name + i}>
-                                    <input
-                                        type="checkbox"
-                                        name="size"
-                                        onChange={this.onToppingChange}
-                                        checked={ this.state.order[0].toppings[topping.id] !== undefined }
-                                        value={ i }
-                                    />
-                                    {topping.name}
-                                </label>
-                            ))
-                        }
-                    </div>
-                    </div>
+                    ))}
                 </div>
+                {/*Summary*/}
                 <div>
                     <h2>Summary</h2>
                     <hr/>
