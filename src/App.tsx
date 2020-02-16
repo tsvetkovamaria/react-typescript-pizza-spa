@@ -5,10 +5,9 @@ import {
     Route,
     Link
 } from "react-router-dom";
-import NewOrder from "./components/NewOrder";
 import StatusPage from "./pages/Status.page";
-import orderOptionsData from "./mock/prices.json"
 import DashboardPage from "./pages/Dashboard.page";
+import OrderCreatePage from "./pages/OrderCreate.page";
 
 function App() {
     return (
@@ -31,7 +30,7 @@ function App() {
                         <DashboardPage />
                     </Route>
                     <Route path="/new">
-                        <NewOrder sizes={orderOptionsData.sizes} toppings={orderOptionsData.toppings}/>
+                        <OrderCreatePage />
                     </Route>
                     <Route path="/status">
                         <StatusPage />

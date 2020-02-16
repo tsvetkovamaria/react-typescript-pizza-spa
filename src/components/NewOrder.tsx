@@ -32,7 +32,7 @@ interface State {
 }
 
 interface Props {
-    sizes: Option[],
+    sizes: Option[]
     toppings: Option[]
 }
 
