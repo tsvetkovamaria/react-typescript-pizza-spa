@@ -88,6 +88,19 @@ class NewOrder extends React.Component<Props, State>{
         console.log(this.state);
     };
 
+    getPrice = (pizza: Pizza): number => {
+        let price = 0;
+        if(pizza.size) {
+            price += pizza.size.price;
+        }
+        price += Object.values(pizza.toppings).reduce((acc, topping) => acc + topping.price, 0)
+        return price;
+    }
+
+    getTotal = (): number => {
+        return this.state.order.reduce((acc, pizza) => acc + this.getPrice(pizza), 0);
+    }
+
     render() {
         return (
             <div>
@@ -187,9 +200,28 @@ class NewOrder extends React.Component<Props, State>{
                 <div>
                     <h2>Summary</h2>
                     <hr/>
+                    {
+                        this.state.order.map((pizza, i) => (
+                            <div key={i}>
+                                <div>
+                                    <b>{pizza.size.name} Pizza {i + 1}</b>
+                                    <span>..........</span>
+                                    <b>$ {this.getPrice(pizza)}</b>
+                                </div>
+                                {
+                                    Object.values(pizza.toppings).map(topping => (
+                                        <div key={topping.name}>
+                                            <b>{topping.name}</b>
+                                            <b>{topping.price}</b>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        ))
+                    }
                     <hr/>
                     <span>TOTAL</span>
-                    <span>$ 25</span>
+                    <span>$ {this.getTotal()}</span>
                 </div>
                 <button onClick={this.onSubmit}>Place Order</button>
             </div>
