@@ -28,7 +28,11 @@ interface State {
     order: Pizza[]
 }
 
-class NewOrder extends React.Component<{}, State>{
+interface Props {
+    sizes: Option[],
+    toppings: Option[]
+}
+class NewOrder extends React.Component<Props, State>{
     state: State = {
         client: {
             name: '',
@@ -36,12 +40,20 @@ class NewOrder extends React.Component<{}, State>{
             phone: '',
             address: ''
         },
-        order: []
-    }
+        order: [],
+    };
 
-    handleInputChange(){
+    onTextChange = (e: any): void => {
+        let client:any = this.state.client;
+        client[e.target.name] = e.target.value;
+        this.setState({client});
+    };
 
-    }
+    onSubmit = (e: any): void => {
+        e.preventDefault();
+        console.log(this.state);
+
+    };
 
     render() {
         return (
@@ -53,25 +65,45 @@ class NewOrder extends React.Component<{}, State>{
                     <div>
                         <label>
                             <span>Name</span>
-                            <input type="text"/>
+                            <input
+                                type="text"
+                                name="name"
+                                value={this.state.client.name}
+                                onChange={this.onTextChange}
+                            />
                         </label>
                     </div>
                     <div>
                         <label>
                             <span>E-mail Address</span>
-                            <input type="text"/>
+                            <input
+                                type="text"
+                                name="email"
+                                value={this.state.client.email}
+                                onChange={this.onTextChange}
+                            />
                         </label>
                     </div>
                     <div>
                         <label>
                             <span>Address</span>
-                            <input type="text"/>
+                            <input
+                                type="text"
+                                name="address"
+                                value={this.state.client.address}
+                                onChange={this.onTextChange}
+                            />
                         </label>
                     </div>
                     <div>
                         <label>
                             <span>Contact number</span>
-                            <input type="text"/>
+                            <input
+                                type="tel"
+                                name="phone"
+                                value={this.state.client.phone}
+                                onChange={this.onTextChange}
+                            />
                         </label>
                     </div>
                 </div>
@@ -84,10 +116,10 @@ class NewOrder extends React.Component<{}, State>{
                     <div>
                         <h4>Choose size</h4>
                         {
-                            ['Small', 'Medium', 'Large'].map(size => (
-                                <label>
-                                    <input type="radio" name="size" value={ size } />
-                                    { size }
+                            this.props.sizes.map((size, i) => (
+                                <label key={size.name + i}>
+                                    <input type="radio" name="size" value={ size.name } />
+                                    { size.name }
                                 </label>
                             ))
                         }
@@ -95,10 +127,10 @@ class NewOrder extends React.Component<{}, State>{
                     <div>
                         <h4>Pick your toppings</h4>
                         {
-                            ['Bacon', 'Pepperoni'].map(topping => (
-                                <label>
-                                    <input type="radio" name="size" value={topping} />
-                                    {topping}
+                            this.props.toppings.map((topping, i) => (
+                                <label key={topping.name + i}>
+                                    <input type="radio" name="size" value={topping.name}/>
+                                    {topping.name}
                                 </label>
                             ))
                         }
@@ -111,7 +143,7 @@ class NewOrder extends React.Component<{}, State>{
                     <span>TOTAL</span>
                     <span>$ 25</span>
                 </div>
-                <button>Place Order</button>
+                <button onClick={this.onSubmit}>Place Order</button>
             </div>
         );
     }
