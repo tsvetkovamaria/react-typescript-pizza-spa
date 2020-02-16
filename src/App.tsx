@@ -5,11 +5,10 @@ import {
     Route,
     Link
 } from "react-router-dom";
-import Dashboard from "./components/Dashboard";
 import NewOrder from "./components/NewOrder";
 import StatusPage from "./pages/Status.page";
-import dashboardData from "./mock/dashboard.json"
 import orderOptionsData from "./mock/prices.json"
+import DashboardPage from "./pages/Dashboard.page";
 
 function App() {
     return (
@@ -29,11 +28,7 @@ function App() {
                 <hr />
                 <Switch>
                     <Route exact path="/">
-                        <Dashboard
-                            status={dashboardData.status}
-                            sales={dashboardData.sales}
-                            history={dashboardData.history}
-                            report={dashboardData.report} />
+                        <DashboardPage />
                     </Route>
                     <Route path="/new">
                         <NewOrder sizes={orderOptionsData.sizes} toppings={orderOptionsData.toppings}/>

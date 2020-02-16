@@ -5,6 +5,7 @@ interface Status{
     delivered: number
     pending: number
 }
+
 interface Sales {
     total: number,
     currency: string
@@ -25,30 +26,37 @@ interface Props {
     report: Report
 }
 
-const Dashboard = ({ status, sales, history, report }: Props) => {
+type Nullable<T> = {[k in keyof T]: T[k] | null}
+type NullableProps = Nullable<Props>
+
+const Dashboard = ({ status, sales, history, report }: NullableProps) => {
     return (
         <div>
-            <div>
+            { status &&<div>
                 <h1>Delivery status</h1>
-                <div>
-                    <h3>Total orders</h3>
-                    <span>{status.total}</span>
-                </div>
-                <div>
-                    <h3>Orders delivered</h3>
-                    <span>{status.delivered}</span>
-                </div>
-                <div>
-                    <h3>Pending delivery</h3>
-                    <span>{status.pending}</span>
-                </div>
+                    <div>
+                        <h3>Total orders</h3>
+                        <span>{status.total}</span>
+                    </div>
+                    <div>
+                        <h3>Orders delivered</h3>
+                        <span>{status.delivered}</span>
+                    </div>
+                    <div>
+                        <h3>Pending delivery</h3>
+                        <span>{status.pending}</span>
+                    </div>
+
             </div>
-            <div>
+            }
+
+            {sales && <div>
                 <h2>Total sales</h2>
                 <span>{sales.currency}</span>
                 <div>{sales.total}</div>
             </div>
-            <div>
+            }
+            {report && <div>
                 <h3>Report</h3>
                 <div>
                     <h4>Ontime delivery</h4>
@@ -63,11 +71,13 @@ const Dashboard = ({ status, sales, history, report }: Props) => {
                     <span>{report.performance}</span>
                 </div>
             </div>
-            <div>
+            }
+            {history && <div>
                 <h3>Order history</h3>
                 <div>{history.labels.join(' ')}</div>
                 <div>{history.data.join(' ')}</div>
             </div>
+            }
         </div>
     );
 }
