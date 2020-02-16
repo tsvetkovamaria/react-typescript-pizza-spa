@@ -20,7 +20,9 @@ interface Topping extends Option {
 
 interface Pizza {
     size: Size
-    toppings: Topping[]
+    toppings: {
+        [id: number]: Topping
+    }
 }
 
 interface State {
@@ -32,6 +34,7 @@ interface Props {
     sizes: Option[],
     toppings: Option[]
 }
+
 class NewOrder extends React.Component<Props, State>{
     state: State = {
         client: {
@@ -40,7 +43,16 @@ class NewOrder extends React.Component<Props, State>{
             phone: '',
             address: ''
         },
-        order: [],
+        order: [
+            {
+                size: {
+                    "name": "Large",
+                    "price": 40.00,
+                    "id": 1
+                },
+                toppings: {}
+            }
+        ],
     };
 
     onTextChange = (e: any): void => {
@@ -49,10 +61,31 @@ class NewOrder extends React.Component<Props, State>{
         this.setState({client});
     };
 
+    onSizeChange = (e: any): void => {
+        const selectedSize = this.props.sizes[e.target.value];
+        // TODO: get i from event, should be index of pizza in order
+        const i = 0;
+        const order = this.state.order[i];
+        order.size = selectedSize;
+        this.setState({order: [order]});
+    }
+
+    onToppingChange = (e: any): void => {
+        const topping = this.props.toppings[e.target.value];
+        // TODO: get i from event, should be index of pizza in order
+        const pizza = this.state.order[0];
+        const toppingExists = pizza.toppings[topping.id];
+        if(toppingExists) {
+            delete pizza.toppings[topping.id]
+        } else {
+            pizza.toppings[topping.id] = topping
+        }
+        this.setState({order: [pizza]})
+    };
+
     onSubmit = (e: any): void => {
         e.preventDefault();
         console.log(this.state);
-
     };
 
     render() {
@@ -109,31 +142,46 @@ class NewOrder extends React.Component<Props, State>{
                 </div>
                 <div>
                     <h3>Choose your pizza</h3>
+                    {/* Pizza form*/}
                     <div>
-                        <h4>Pizza 1</h4>
-                        <button>Remove Pizza</button>
-                    </div>
-                    <div>
-                        <h4>Choose size</h4>
-                        {
-                            this.props.sizes.map((size, i) => (
-                                <label key={size.name + i}>
-                                    <input type="radio" name="size" value={ size.name } />
-                                    { size.name }
-                                </label>
-                            ))
-                        }
-                    </div>
-                    <div>
+                        <div>
+                            <h4>Pizza 1</h4>
+                            <button>Remove Pizza</button>
+                        </div>
+                        <div>
+                            <h4>Choose size</h4>
+                            {
+                                this.props.sizes.map((size, i) => (
+                                    <label key={size.name + i}>
+                                        <input
+                                            type="radio"
+                                            name="size"
+                                            checked={this.state.order[0].size.id === size.id}
+                                            onChange={this.onSizeChange}
+                                            value={ i }
+                                        />
+                                        { size.name }
+                                    </label>
+                                ))
+                            }
+                        </div>
+                        <div>
                         <h4>Pick your toppings</h4>
                         {
                             this.props.toppings.map((topping, i) => (
                                 <label key={topping.name + i}>
-                                    <input type="radio" name="size" value={topping.name}/>
+                                    <input
+                                        type="checkbox"
+                                        name="size"
+                                        onChange={this.onToppingChange}
+                                        checked={ this.state.order[0].toppings[topping.id] !== undefined }
+                                        value={ i }
+                                    />
                                     {topping.name}
                                 </label>
                             ))
                         }
+                    </div>
                     </div>
                 </div>
                 <div>
