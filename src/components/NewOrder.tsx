@@ -91,7 +91,6 @@ class NewOrder extends React.Component<Props, State>{
         e.preventDefault();
         const order = this.serializeOrder();
         this.props.onOrder(order);
-        console.log(order);
     };
 
     addItem = ():void => {
@@ -101,6 +100,12 @@ class NewOrder extends React.Component<Props, State>{
         };
         const order = this.state.order;
         order.push(newItem);
+        this.setState({order})
+    };
+
+    deleteItem = (e: any):void => {
+        const index = parseInt(e.target.dataset.item);
+        const order = this.state.order.filter((el, i) => i !== index);
         this.setState({order})
     };
 
@@ -188,6 +193,8 @@ class NewOrder extends React.Component<Props, State>{
                             <div className="bg-gray-800 text-white p-3 flex justify-between items-center">
                                 <h4 className="uppercase font-bold text-lg">Pizza {itemIndex + 1}</h4>
                                 <button
+                                    onClick={this.deleteItem}
+                                    data-item={itemIndex}
                                     className="text-xs border border-2 text-red-500 border-red-500 px-4 py-2">
                                     Remove Pizza
                                 </button>
@@ -253,7 +260,7 @@ class NewOrder extends React.Component<Props, State>{
                                 <div className="flex justify-between mb-2 mt-4">
                                     <b className="mr-8 whitespace-no-wrap">{item.size.name} Pizza {i + 1}</b>
                                     <span className="w-full border-b"></span>
-                                    <b className="ml-8 whitespace-no-wrap">$ {this.getPrice(item)}</b>
+                                    <b className="ml-8 whitespace-no-wrap">$ {this.getPrice(item) || '0'}</b>
                                 </div>
                                 {
                                     Object.values(item.toppings).map(topping => (
@@ -269,7 +276,7 @@ class NewOrder extends React.Component<Props, State>{
                     <hr className="my-4"/>
                     <div className="flex justify-between text-2xl bold">
                         <span>TOTAL</span>
-                        <span>$ {this.getTotal()}</span>
+                        <span>$ {this.getTotal() || '0'}</span>
                     </div>
                 </div>
                 <div className="text-right">

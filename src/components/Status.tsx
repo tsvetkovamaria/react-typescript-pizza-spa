@@ -92,6 +92,7 @@ const Status = ({ orders , onChangeOrder}: Props) => {
                     <span className="text-teal-500 text-lg">{orders.length}</span>
                     <span className="text-xs text-gray-500"> items</span>
                 </div>
+                {/*TODO: show chart*/}
                 {/*<div*/}
                 {/*    style={{ width: '100px' }}*/}
                 {/*    className="bg-gray-400 h-2 block rounded">*/}
