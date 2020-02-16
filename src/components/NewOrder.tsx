@@ -12,6 +12,7 @@ interface Option {
     price: number
     id: number
 }
+
 interface Size extends Option {
 }
 
@@ -43,9 +44,7 @@ class NewOrder extends React.Component<Props, State>{
             phone: '',
             address: ''
         },
-        order: [
-
-        ],
+        order: [],
     };
 
     onTextChange = (e: any): void => {

@@ -43,7 +43,7 @@ const Status = ({ orders }: Props) => {
                     <tbody>
                     {
                         orders.map(order =>
-                            <tr>
+                            <tr key={order.id}>
                                 <td>{order.id}</td>
                                 <td>{order.address}</td>
                                 <td>{order.time}</td>
