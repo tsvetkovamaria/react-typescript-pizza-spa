@@ -9,6 +9,38 @@ import Status from "./components/Status";
 import Dashboard from "./components/Dashboard";
 import NewOrder from "./components/NewOrder";
 
+const dashboardData = {
+    "status": {
+        "total": 150,
+        "delivered": 120,
+        "pending": 30
+    },
+    "sales": {
+        "total": 14543,
+        "currency": "USD"
+    },
+    "history": {
+        "labels": [
+            "",
+            "08 AM",
+            "11 AM",
+            "01 PM",
+            "03 PM",
+            "04 PM",
+            "06 PM",
+            "08PM",
+            "10 PM",
+            ""
+        ],
+        "data": [25, 20, 30, 25, 35, 20, 30, 25, 35, 30]
+    },
+    "report": {
+        "ontime": "+29.7%",
+        "late": "53.4%",
+        "performance": "+0.05%"
+    }
+}
+
 function App() {
     return (
         <Router>
@@ -27,7 +59,11 @@ function App() {
                 <hr />
                 <Switch>
                     <Route exact path="/">
-                        <Dashboard />
+                        <Dashboard
+                            status={dashboardData.status}
+                            sales={dashboardData.sales}
+                            history={dashboardData.history}
+                            report={dashboardData.report} />
                     </Route>
                     <Route path="/new">
                         <NewOrder />
