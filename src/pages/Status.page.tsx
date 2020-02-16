@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Status from "../components/Status";
-import { getOrders } from "../api/api";
+import { getOrders, updateOrder } from "../api/api";
 
 const StatusPage = () => {
     const initialState = {orders: []}
@@ -11,11 +11,16 @@ const StatusPage = () => {
             .then(res => setOrders(res))
     }
 
+    async function onChangeOrder(order: any) {
+        updateOrder(order)
+            .then(fetchData)
+    }
+
     useEffect(() => {
         fetchData();
     }, []);
 
-    return <Status orders={orders.orders} />
+    return <Status orders={orders.orders} onChangeOrder={onChangeOrder}/>
 }
 
 export default StatusPage;

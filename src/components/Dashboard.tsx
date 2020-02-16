@@ -87,7 +87,7 @@ const Dashboard = ({ status, sales, history, report }: NullableProps) => {
                                 style={{ width: '100px' }}
                                 className="bg-gray-400 h-2 block rounded">
                                 <span
-                                    style={{ width: parseInt(report.ontime)+'px' }}
+                                    style={{ width: parseInt(report.ontime)+'%' }}
                                     className="bg-teal-400 h-2 block rounded">
                                 </span>
                             </span>
@@ -99,7 +99,7 @@ const Dashboard = ({ status, sales, history, report }: NullableProps) => {
                                 style={{ width: '100px' }}
                                 className="bg-gray-400 h-2 block rounded">
                                 <span
-                                    style={{ width: parseInt(report.late)+'px' }}
+                                    style={{ width: parseInt(report.late)+'%' }}
                                     className="bg-pink-600 h-2 block rounded">
                                 </span>
                             </span>
