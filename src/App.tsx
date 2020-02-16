@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
+import Status from "./components/Status";
+import Dashboard from "./components/Dashboard";
+import NewOrder from "./components/NewOrder";
 
-const App = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function App() {
+    return (
+        <Router>
+            <div>
+                <ul>
+                    <li>
+                        <Link to="/">Dashboard</Link>
+                    </li>
+                    <li>
+                        <Link to="/new">New order</Link>
+                    </li>
+                    <li>
+                        <Link to="/status">Status</Link>
+                    </li>
+                </ul>
+                <hr />
+                <Switch>
+                    <Route exact path="/">
+                        <Dashboard />
+                    </Route>
+                    <Route path="/new">
+                        <NewOrder />
+                    </Route>
+                    <Route path="/status">
+                        <Status />
+                    </Route>
+                </Switch>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
