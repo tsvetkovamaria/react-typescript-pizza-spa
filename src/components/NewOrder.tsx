@@ -19,7 +19,7 @@ interface Size extends Option {
 interface Topping extends Option {
 }
 
-interface Pizza {
+interface Item {
     size: Size
     toppings: {
         [id: number]: Topping
@@ -28,12 +28,14 @@ interface Pizza {
 
 interface State {
     client: User
-    order: Pizza[]
+    order: Item[]
 }
 
 interface Props {
     sizes: Option[]
     toppings: Option[]
+
+    onOrder(order: any): void
 }
 
 class NewOrder extends React.Component<Props, State>{
@@ -55,8 +57,7 @@ class NewOrder extends React.Component<Props, State>{
 
     onSizeChange = (e: any): void => {
         const selectedSize = this.props.sizes[e.target.value];
-        // TODO: get i from event, should be index of pizza in order
-        const i = e.target.dataset.pizza;
+        const i = e.target.dataset.item;
         const order = this.state.order;
         order[i].size = selectedSize;
         this.setState({order});
@@ -64,32 +65,38 @@ class NewOrder extends React.Component<Props, State>{
 
     onToppingChange = (e: any): void => {
         const topping = this.props.toppings[e.target.value];
-        // TODO: get i from event, should be index of pizza in order
-        const i = e.target.dataset.pizza;
+        const i = e.target.dataset.item;
         const order = this.state.order;
-        const pizza = order[i];
-        const toppingExists = pizza.toppings[topping.id];
+        const item = order[i];
+        const toppingExists = item.toppings[topping.id];
         if(toppingExists) {
-            delete pizza.toppings[topping.id]
+            delete item.toppings[topping.id]
         } else {
-            pizza.toppings[topping.id] = topping
+            item.toppings[topping.id] = topping
         }
         this.setState({order})
     };
 
+    serializeOrder = () => {
+        const order = {
+            personalDetails: this.state.client,
+            order: this.state.order.map(item => ({
+                size: item.size.name,
+                toppings: Object.values(item.toppings).map(topping => topping.name)
+            }))
+        };
+        return order;
+    };
     onSubmit = (e: any): void => {
         e.preventDefault();
-        console.log(this.state);
+        const order = this.serializeOrder();
+        this.props.onOrder(order);
+        console.log(order);
     };
 
     addItem = ():void => {
-        const defaultSize = {
-            "name": "Large",
-            "price": 40.00,
-            "id": 1
-        };
         const newItem = {
-            size: defaultSize,
+            size: {...this.props.sizes[0]},
             toppings: {}
         };
         const order = this.state.order;
@@ -97,17 +104,17 @@ class NewOrder extends React.Component<Props, State>{
         this.setState({order})
     };
 
-    getPrice = (pizza: Pizza): number => {
+    getPrice = (item: Item): number => {
         let price = 0;
-        if(pizza.size) {
-            price += pizza.size.price;
+        if(item.size) {
+            price += item.size.price;
         }
-        price += Object.values(pizza.toppings).reduce((acc, topping) => acc + topping.price, 0)
+        price += Object.values(item.toppings).reduce((acc, topping) => acc + topping.price, 0)
         return price;
     }
 
     getTotal = (): number => {
-        return this.state.order.reduce((acc, pizza) => acc + this.getPrice(pizza), 0);
+        return this.state.order.reduce((acc, item) => acc + this.getPrice(item), 0);
     }
 
     render() {
@@ -166,10 +173,10 @@ class NewOrder extends React.Component<Props, State>{
                     <h3>Choose your pizza</h3>
                     <button onClick={this.addItem}>Add pizza</button>
                     {/* Pizza form*/}
-                    { this.state.order.map((pizza, pizzaIndex) => (
-                        <div key={pizzaIndex}>
+                    { this.state.order.map((item,itemIndex) => (
+                        <div key={itemIndex}>
                             <div>
-                                <h4>Pizza {pizzaIndex + 1}</h4>
+                                <h4>Pizza {itemIndex + 1}</h4>
                                 <button>Remove Pizza</button>
                             </div>
                             <div>
@@ -179,9 +186,9 @@ class NewOrder extends React.Component<Props, State>{
                                         <label key={size.name + i}>
                                             <input
                                                 type="radio"
-                                                name={'size' + pizzaIndex}
-                                                checked={pizza.size.id === size.id}
-                                                data-pizza={pizzaIndex}
+                                                name={'size' + itemIndex}
+                                                checked={item.size.id === size.id}
+                                                data-item={itemIndex}
                                                 onChange={this.onSizeChange}
                                                 value={ i }
                                             />
@@ -197,10 +204,10 @@ class NewOrder extends React.Component<Props, State>{
                                         <label key={topping.name + i}>
                                             <input
                                                 type="checkbox"
-                                                name={'topping' + pizzaIndex}
-                                                data-pizza={pizzaIndex}
+                                                name={'topping' + itemIndex}
+                                                data-item={itemIndex}
                                                 onChange={this.onToppingChange}
-                                                checked={ pizza.toppings[topping.id] !== undefined }
+                                                checked={ item.toppings[topping.id] !== undefined }
                                                 value={ i }
                                             />
                                             {topping.name}
@@ -216,15 +223,15 @@ class NewOrder extends React.Component<Props, State>{
                     <h2>Summary</h2>
                     <hr/>
                     {
-                        this.state.order.map((pizza, i) => (
+                        this.state.order.map((item, i) => (
                             <div key={i}>
                                 <div>
-                                    <b>{pizza.size.name} Pizza {i + 1}</b>
+                                    <b>{item.size.name} Pizza {i + 1}</b>
                                     <span>..........</span>
-                                    <b>$ {this.getPrice(pizza)}</b>
+                                    <b>$ {this.getPrice(item)}</b>
                                 </div>
                                 {
-                                    Object.values(pizza.toppings).map(topping => (
+                                    Object.values(item.toppings).map(topping => (
                                         <div key={topping.name}>
                                             <b>{topping.name}</b>
                                             <b>{topping.price}</b>
