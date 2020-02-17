@@ -45,6 +45,9 @@ Todo:
 
 Backend https://github.com/naten2020/piz
 
+Known bugs:
+
+* when deleting pizza from the middle, pizza form has wrong view state. It happens because I rely on array index. Either relying on unique id generated inside item or changind order structire into a hash map with unuque id as a key would solve the issue
 
 ## Available Scripts
 
