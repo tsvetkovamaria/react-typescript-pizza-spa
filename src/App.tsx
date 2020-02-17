@@ -18,18 +18,18 @@ function App() {
                         <Link className="text-2xl" to="/">Pizza Manager</Link>
                     </header>
                     <div className="flex justify-between">
-                        <ul className="w-1/6">
-                            <li>
+                        <ul className="w-1/6 pt-20">
+                            <li className="p-2">
                                 <Link to="/">Dashboard</Link>
                             </li>
-                            <li>
+                            <li className="p-2">
                                 <Link to="/new">New order</Link>
                             </li>
-                            <li>
+                            <li className="p-2">
                                 <Link to="/status">Status</Link>
                             </li>
                         </ul>
-                        <div className="text-black bg-white rounded-lg w-5/6 px-12 py-12">
+                        <div className="text-black bg-white rounded-lg w-5/6 px-12 py-12 shadow-lg mb-24">
                             <Switch>
                                 <Route exact path="/">
                                     <DashboardPage />

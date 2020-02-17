@@ -44,7 +44,7 @@ const Dashboard = ({ status, sales, history, report }: NullableProps) => {
                     <div className="flex justify-center">
                         <div>
                             <DeliveryChart
-                                data={ [{value: status.delivered, label: 'Delivered'},{value: status.pending, label: 'Pending'}] }
+                                data={ [{value: status.pending, label: 'Pending'}, {value: status.delivered, label: 'Delivered'}] }
                                 color="#55D1C5"
                             />
                             <span className="text-lg text-gray-800 font-bold">{status.delivered}</span>
@@ -52,7 +52,7 @@ const Dashboard = ({ status, sales, history, report }: NullableProps) => {
                         </div>
                         <div className="ml-10">
                             <DeliveryChart
-                                data={ [{value: status.pending, label: 'Pending'},{value: status.delivered, label: 'Delivered'}] }
+                                data={ [{value: status.delivered, label: 'Delivered'},{value: status.pending, label: 'Pending'}] }
                                 color="#D54A8B"
                             />
                             <span className="text-lg text-gray-800 font-bold">{status.pending}</span>
