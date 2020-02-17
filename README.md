@@ -1,5 +1,51 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Major question to answer:
+
+1.
+I see two roles: admin and user. 
+
+User 
+* can create order
+
+Admin 
+* can see stats 
+* can see list of all orders (+CRUD)
+
+But I don't see login/logout features and api has no auth. So auth and protected routes are not implemented at all. Any user in the app is an admin.
+
+2.
+Tha docs in readme and real api don't match. So some data was taken from readme (like expected order structure) while routes were taken from backend repo. Creating orders doesn't work properly on backend, so you'll see empty rows for all new orders in Status page
+
+3.
+I didn't know what should happen after order is placed, so did nothing. Probably I whould show success message and then redirect to a single order view page so that user can track status. Or maybe prompt to create another order - clear form and show message. 
+
+Done: 
+* UI of Create Order, Dashboard, Status, main layout 
+* Connect all pages to api
+* Separate smart components from dumb ones (smart pages connect to api)
+* Status page: list orders, change status
+* Create order:  add several pizzas, add user, toggle pizza form, show dynamic summary
+* Dashboard page: all charts show actual info
+
+Todo:
+
+* refactor App components - separate layout from routes
+* split components into smaller UI components to make them maintainable (Dashboard)
+* validate user input - required fields, input length, input masks
+* handle server errors and show notifications
+* highlight nav item for current route, add icons to menu
+* move base url to env variables
+* add chart on status page
+* "print summary" on status page should generate pdf, would take a library for that
+* work on UI, add microinteractions and some smooth animations
+* lint, unit test and set pre-commit hooks
+* add docs
+
+
+Backend https://github.com/naten2020/piz
+
+
 ## Available Scripts
 
 In the project directory, you can run:
